@@ -12,81 +12,100 @@ namespace Work1
 {
     public partial class Form1 : Form
     {
-        private CaesarCipher _cypher;
-
-        private int _curLocale;
-
         public Form1()
         {
             InitializeComponent();
-            _cypher = new CaesarCipher();
-
-            foreach (var lang in Locales.LocalesDictionary.Values)
-            {
-                comboBox_Locale.Items.Add(lang.Name);
-            }
-            comboBox_Locale.SelectedIndex = 0;
         }
-
-        private void button_Cipher_Click(object sender, EventArgs e)
-        {
-
-
-        }
-
-
-        private string AddSeparator(string text)
-        {
-            var resText = "";
-            for (int i = 0; i < text.Length; i++)
-            {
-                resText += text[i];
-                if (i % 5 == 4)
-                {
-                    resText += " ";
-                }
-            }
-            return resText;
-        }
-
-        private void comboBox_Locale_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _curLocale = comboBox_Locale.SelectedIndex;
-            StartConvert();
-        }
-
+        
         private void numericUpDown_Shift_ValueChanged(object sender, EventArgs e)
         {
-            StartConvert();
+            switch (tabControl1.SelectedIndex)
+            {
+                case 0:
+                    StartEncrypt();
+                    break;
+                case 1:
+                    StartDecrypt();
+                    break;
+            }
         }
 
         private void richTextBox_Source_TextChanged(object sender, EventArgs e)
         {
-            StartConvert();
+            StartEncrypt();
         }
 
-        private void StartConvert()
+        private void StartEncrypt()
         {
             var sourceText = richTextBox_Source.Text;
-            _cypher.CurrentLocale = Locales.LocalesDictionary[_curLocale];
-            _cypher.Shift = (int)numericUpDown_Shift.Value;
-            _cypher.SourceText = sourceText;
-            _cypher.Run();
-            richTextBox_Сipher.Text = AddSeparator(_cypher.CurrentCipher);
+            Cipher cypher;
+            cypher = new CaesarCipher();
+            var cipherText = cypher.Encrypt(sourceText, (int)numericUpDown_Shift.Value);
+            richTextBox_Сipher.Text = cipherText;
 
+        }
+
+        private void StartDecrypt()
+        {
+            var cypherText = richTextBox_Сipher.Text;
+            Cipher cypher;
+            cypher = new CaesarCipher();
+            var sourceText = cypher.Decrypt(cypherText, (int)numericUpDown_Shift.Value);
+            richTextBox_Decripted.Text = sourceText;
+        }
+
+        private void StartHacking()
+        {
+            var cypherText = richTextBox_Сipher.Text;
+            Cipher cypher;
+            cypher = new CaesarCipher();
+            var sourceText = cypher.Hack(cypherText);
+            richTextBox_Hacked.Text = sourceText;
+            numericUpDown_Shift.Value = cypher.HackerShift;
         }
 
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
-            if (tabControl1.SelectedIndex == 0)
+            switch (tabControl1.SelectedIndex)
             {
-                richTextBox_Сipher.ReadOnly = true;
-                StartConvert();
+                case 0:
+                    richTextBox_Сipher.ReadOnly = true;
+                    richTextBox_Сipher.BackColor = Color.FromArgb(240, 240, 240);
+                    numericUpDown_Shift.Enabled = true;
+                    StartEncrypt();
+                    break;
+                case 1:
+                    richTextBox_Сipher.ReadOnly = false;
+                    richTextBox_Сipher.BackColor = Color.White;
+                    numericUpDown_Shift.Enabled = true;
+                    StartDecrypt();
+                    break;
+                case 2:
+                    richTextBox_Сipher.ReadOnly = false;
+                    richTextBox_Сipher.BackColor = Color.White;
+                    numericUpDown_Shift.Enabled = false;
+                    StartHacking();
+                    break;
             }
-            else
+            
+        }
+
+        private void richTextBox_Сipher_TextChanged(object sender, EventArgs e)
+        {
+            switch (tabControl1.SelectedIndex)
             {
-                richTextBox_Сipher.ReadOnly = false;
+                case 1:
+                    StartDecrypt();
+                    break;
+                case 2:
+                    StartHacking();
+                    break;
             }
+        }
+
+        private void button_ClearCipher_Click(object sender, EventArgs e)
+        {
+            richTextBox_Сipher.Clear();
         }
     }
 }

@@ -5,50 +5,33 @@ using System.Text;
 
 namespace Work1.Caesar
 {
-    public class CaesarCipher
+    public class CaesarCipher : Cipher
     {
-        private string _sourceText;
-
-        public string SourceText
-        {
-            get { return _sourceText; }
-            set { _sourceText = ConvertSourceText(value); }
-        }
-        public string CurrentCipher { get; set; }
-        public Locale CurrentLocale { get; set; }
-        public int Shift { get; set; }
-
-        public void Run()
-        {
-            var resList = new List<string>();
-            foreach (var sym in SourceText)
-            {
-                var ciphreIndex = (CurrentLocale.CipherAlphabet.IndexOf(sym) + Shift) % CurrentLocale.CipherAlphabet.Count;
-                if (ciphreIndex < 0)
-                {
-                    ciphreIndex += CurrentLocale.CipherAlphabet.Count;
-                }
-                resList.Add(CurrentLocale.CipherAlphabet[ciphreIndex].ToString());
-            }
-            CurrentCipher = String.Concat(resList.ToArray());
-        }
-
-
-        string ConvertSourceText(string sourceText)
+        string HandleSourceText(string sourceText)
         {
             var upper = sourceText.ToUpper();
 
-            upper = Replace(upper, CurrentLocale.ReplacmentList);
-            var resString = new List<string>();
-
-            foreach (var sym in upper)
+            foreach (var locale in Locales.LocalesList)
             {
-                if (CurrentLocale.Alphabet.Contains(sym))
+                if (locale.ReplacmentList.Count != 0)
                 {
-                    resString.Add(sym.ToString());
+                    upper = Replace(upper, locale.ReplacmentList);
                 }
             }
-            return String.Concat(resString.ToArray());
+
+            string resString = "";
+            foreach (var sym in upper)
+            {
+                foreach (var locale in Locales.LocalesList)
+                {
+                    if (locale.Alphabet.Contains(sym))
+                    {
+                        resString += sym;
+                        break;
+                    }
+                }
+            }
+            return resString;
         }
 
         private string Replace(string text, List<Tuple<char, char>> replaces)
@@ -74,6 +57,96 @@ namespace Work1.Caesar
                 }
             }
             return resultText;
+        }
+
+
+        public override string Encrypt(string text, int shift)
+        {
+            var handledText = HandleSourceText(text);
+
+            var resString = "";
+            foreach (var sym in handledText)
+            {
+                var currentLocale = Locales.LocalesList.Find(x => x.Alphabet.Contains(sym));
+                var ciphreIndex = (currentLocale.Alphabet.IndexOf(sym) + shift) % currentLocale.Alphabet.Count;
+                if (ciphreIndex < 0)
+                {
+                    ciphreIndex += currentLocale.Alphabet.Count;
+                }
+                resString += currentLocale.Alphabet[ciphreIndex];
+            }
+            return AddSeparator(resString, 5);
+        }
+
+        public override string Decrypt(string ciphertext, int shift)
+        {
+            var handledText = HandleSourceText(ciphertext);
+
+            var resString = "";
+            foreach (var sym in handledText)
+            {
+                var currentLocale = Locales.LocalesList.Find(x => x.Alphabet.Contains(sym));
+                var ciphreIndex = (currentLocale.Alphabet.IndexOf(sym) - shift) % currentLocale.Alphabet.Count;
+                if (ciphreIndex < 0)
+                {
+                    ciphreIndex += currentLocale.Alphabet.Count;
+                }
+                resString += currentLocale.Alphabet[ciphreIndex];
+            }
+            return AddSeparator(resString, 5);
+        }
+
+        public override string Hack(string ciphertext)
+        {
+            var handledText = HandleSourceText(ciphertext);
+            var russianLocale = Locales.LocalesList.Find(x => x.Name == "Русский");
+
+            var minShift = 32;
+            var minSum = -1.0;
+            for (var shift = 0; shift < 32; shift++)
+            {
+                var resString = "";
+                foreach (var sym in handledText)
+                {
+                    var currentLocale = Locales.LocalesList.Find(x => x.Alphabet.Contains(sym));
+                    var ciphreIndex = (currentLocale.Alphabet.IndexOf(sym) + shift) % currentLocale.Alphabet.Count;
+                    if (ciphreIndex < 0)
+                    {
+                        ciphreIndex += currentLocale.Alphabet.Count;
+                    }
+                    resString += currentLocale.Alphabet[ciphreIndex];
+                }
+
+                var wTable = GetFrequencyTable(resString);
+
+                var sum = 0.0;
+                for (var i = 0; i < 32; i++)
+                {
+                    sum += Math.Pow((russianLocale.CharFrequency.Values.ToList()[i] - wTable.Values.ToList()[i]), 2);
+                }
+
+                if (sum < minSum || minSum == -1.0)
+                {
+                    minSum = sum;
+                    minShift = shift;
+                }
+            }
+
+            this.HackerShift = 32 - minShift;
+
+            return Decrypt(ciphertext, 32 - minShift);
+        }
+
+        private Dictionary<char, double> GetFrequencyTable(string text)
+        {
+            var russianLocale = Locales.LocalesList.Find(x => x.Name == "Русский");
+            return russianLocale.CharFrequency.ToDictionary(charFreq => charFreq.Key, charFreq => CalcFrequency(text, charFreq.Key));
+        }
+
+        private double CalcFrequency(string text, char c)
+        {
+            var count = text.Count(sym => sym == c);
+            return (double)count / text.Length;
         }
     }
 }
