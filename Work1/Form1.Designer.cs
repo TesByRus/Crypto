@@ -31,17 +31,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.richTextBox_Сipher = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown_Shift = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.richTextBox_Decripted = new System.Windows.Forms.RichTextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.richTextBox_Source = new System.Windows.Forms.RichTextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.richTextBox_Decripted = new System.Windows.Forms.RichTextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.richTextBox_Hacked = new System.Windows.Forms.RichTextBox();
             this.button_ClearCipher = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Shift)).BeginInit();
+            this.textBox_shift = new System.Windows.Forms.TextBox();
+            this.comboBox_currentCipher = new System.Windows.Forms.ComboBox();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -79,25 +79,6 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Шифр";
             // 
-            // numericUpDown_Shift
-            // 
-            this.numericUpDown_Shift.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDown_Shift.Location = new System.Drawing.Point(458, 402);
-            this.numericUpDown_Shift.Maximum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            0});
-            this.numericUpDown_Shift.Minimum = new decimal(new int[] {
-            1000000000,
-            0,
-            0,
-            -2147483648});
-            this.numericUpDown_Shift.Name = "numericUpDown_Shift";
-            this.numericUpDown_Shift.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown_Shift.TabIndex = 5;
-            this.numericUpDown_Shift.ValueChanged += new System.EventHandler(this.numericUpDown_Shift_ValueChanged);
-            // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -118,6 +99,17 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Расшифровка";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox_Decripted
+            // 
+            this.richTextBox_Decripted.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.richTextBox_Decripted.Location = new System.Drawing.Point(6, 6);
+            this.richTextBox_Decripted.Name = "richTextBox_Decripted";
+            this.richTextBox_Decripted.ReadOnly = true;
+            this.richTextBox_Decripted.Size = new System.Drawing.Size(353, 382);
+            this.richTextBox_Decripted.TabIndex = 0;
+            this.richTextBox_Decripted.Text = "";
             // 
             // tabPage1
             // 
@@ -157,16 +149,6 @@
             this.tabControl1.TabIndex = 2;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             // 
-            // richTextBox_Decripted
-            // 
-            this.richTextBox_Decripted.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.richTextBox_Decripted.Location = new System.Drawing.Point(6, 6);
-            this.richTextBox_Decripted.Name = "richTextBox_Decripted";
-            this.richTextBox_Decripted.Size = new System.Drawing.Size(353, 382);
-            this.richTextBox_Decripted.TabIndex = 0;
-            this.richTextBox_Decripted.Text = "";
-            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.richTextBox_Hacked);
@@ -185,6 +167,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox_Hacked.Location = new System.Drawing.Point(6, 6);
             this.richTextBox_Hacked.Name = "richTextBox_Hacked";
+            this.richTextBox_Hacked.ReadOnly = true;
             this.richTextBox_Hacked.Size = new System.Drawing.Size(353, 382);
             this.richTextBox_Hacked.TabIndex = 0;
             this.richTextBox_Hacked.Text = "";
@@ -192,28 +175,48 @@
             // button_ClearCipher
             // 
             this.button_ClearCipher.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_ClearCipher.Location = new System.Drawing.Point(698, 394);
+            this.button_ClearCipher.Location = new System.Drawing.Point(698, 399);
             this.button_ClearCipher.Name = "button_ClearCipher";
             this.button_ClearCipher.Size = new System.Drawing.Size(73, 23);
             this.button_ClearCipher.TabIndex = 7;
             this.button_ClearCipher.Text = "Очистить";
             this.button_ClearCipher.UseVisualStyleBackColor = true;
+            this.button_ClearCipher.Click += new System.EventHandler(this.button_ClearCipher_Click_1);
+            // 
+            // textBox_shift
+            // 
+            this.textBox_shift.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_shift.Location = new System.Drawing.Point(458, 404);
+            this.textBox_shift.Name = "textBox_shift";
+            this.textBox_shift.Size = new System.Drawing.Size(122, 20);
+            this.textBox_shift.TabIndex = 8;
+            this.textBox_shift.TextChanged += new System.EventHandler(this.textBox_shift_TextChanged);
+            // 
+            // comboBox_currentCipher
+            // 
+            this.comboBox_currentCipher.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_currentCipher.FormattingEnabled = true;
+            this.comboBox_currentCipher.Location = new System.Drawing.Point(650, 5);
+            this.comboBox_currentCipher.Name = "comboBox_currentCipher";
+            this.comboBox_currentCipher.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_currentCipher.TabIndex = 9;
+            this.comboBox_currentCipher.SelectedIndexChanged += new System.EventHandler(this.comboBox_currentCipher_SelectedIndexChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 444);
+            this.Controls.Add(this.comboBox_currentCipher);
+            this.Controls.Add(this.textBox_shift);
             this.Controls.Add(this.button_ClearCipher);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.numericUpDown_Shift);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.richTextBox_Сipher);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Shift)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -228,7 +231,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RichTextBox richTextBox_Сipher;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown numericUpDown_Shift;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage1;
@@ -238,6 +240,8 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.RichTextBox richTextBox_Hacked;
         private System.Windows.Forms.Button button_ClearCipher;
+        private System.Windows.Forms.TextBox textBox_shift;
+        private System.Windows.Forms.ComboBox comboBox_currentCipher;
     }
 }
 
