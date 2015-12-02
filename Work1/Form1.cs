@@ -20,6 +20,7 @@ namespace Work1
             comboBox_currentCipher.Items.Add("Шифр Цезаря");
             comboBox_currentCipher.Items.Add("Шифр Виженера");
             comboBox_currentCipher.SelectedIndex = 0;
+            UpdateCipher();
         }
 
         private void richTextBox_Source_TextChanged(object sender, EventArgs e)
@@ -31,9 +32,12 @@ namespace Work1
         {
             var sourceText = richTextBox_Source.Text;
             Cipher cypher;
-            cypher = new CaesarCipher();
-            var cipherText = cypher.Encrypt(sourceText, GetShift());
-            richTextBox_Сipher.Text = cipherText;
+            cypher = _currentCipher;
+            if (cypher != null)
+            {
+                var cipherText = cypher.Encrypt(sourceText, GetShift(), "ПОЭЗИЯ");
+                richTextBox_Сipher.Text = cipherText;
+            }
 
         }
 
@@ -41,16 +45,19 @@ namespace Work1
         {
             var cypherText = richTextBox_Сipher.Text;
             Cipher cypher;
-            cypher = new CaesarCipher();
-            var sourceText = cypher.Decrypt(cypherText, GetShift());
-            richTextBox_Decripted.Text = sourceText;
+            cypher = _currentCipher;
+            if (cypher != null)
+            {
+                var sourceText = cypher.Decrypt(cypherText, GetShift());
+                richTextBox_Decripted.Text = sourceText;
+            }
         }
 
         private void StartHacking()
         {
             var cypherText = richTextBox_Сipher.Text;
             Cipher cypher;
-            cypher = new CaesarCipher();
+            cypher = _currentCipher;
             var sourceText = cypher.Hack(cypherText);
             richTextBox_Hacked.Text = sourceText;
             textBox_shift.Text = cypher.HackerShift.ToString();
@@ -187,14 +194,25 @@ namespace Work1
 
         private void comboBox_currentCipher_SelectedIndexChanged(object sender, EventArgs e)
         {
+            UpdateCipher();
+        }
+
+        void UpdateCipher()
+        {
             switch (comboBox_currentCipher.SelectedIndex)
             {
                 case 0:
                     _currentCipher = new CaesarCipher();
                     break;
                 case 1:
+                    _currentCipher = new VigenerCipher();
                     break;
             }
         }
-}
+
+        private void textBox_keyWord_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

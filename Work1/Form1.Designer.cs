@@ -42,6 +42,7 @@
             this.button_ClearCipher = new System.Windows.Forms.Button();
             this.textBox_shift = new System.Windows.Forms.TextBox();
             this.comboBox_currentCipher = new System.Windows.Forms.ComboBox();
+            this.textBox_keyWord = new System.Windows.Forms.TextBox();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -175,7 +176,7 @@
             // button_ClearCipher
             // 
             this.button_ClearCipher.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_ClearCipher.Location = new System.Drawing.Point(698, 399);
+            this.button_ClearCipher.Location = new System.Drawing.Point(698, 404);
             this.button_ClearCipher.Name = "button_ClearCipher";
             this.button_ClearCipher.Size = new System.Drawing.Size(73, 23);
             this.button_ClearCipher.TabIndex = 7;
@@ -188,7 +189,7 @@
             this.textBox_shift.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_shift.Location = new System.Drawing.Point(458, 404);
             this.textBox_shift.Name = "textBox_shift";
-            this.textBox_shift.Size = new System.Drawing.Size(122, 20);
+            this.textBox_shift.Size = new System.Drawing.Size(84, 20);
             this.textBox_shift.TabIndex = 8;
             this.textBox_shift.TextChanged += new System.EventHandler(this.textBox_shift_TextChanged);
             // 
@@ -202,11 +203,20 @@
             this.comboBox_currentCipher.TabIndex = 9;
             this.comboBox_currentCipher.SelectedIndexChanged += new System.EventHandler(this.comboBox_currentCipher_SelectedIndexChanged);
             // 
+            // textBox_keyWord
+            // 
+            this.textBox_keyWord.Location = new System.Drawing.Point(592, 404);
+            this.textBox_keyWord.Name = "textBox_keyWord";
+            this.textBox_keyWord.Size = new System.Drawing.Size(100, 20);
+            this.textBox_keyWord.TabIndex = 10;
+            this.textBox_keyWord.TextChanged += new System.EventHandler(this.textBox_keyWord_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 444);
+            this.Controls.Add(this.textBox_keyWord);
             this.Controls.Add(this.comboBox_currentCipher);
             this.Controls.Add(this.textBox_shift);
             this.Controls.Add(this.button_ClearCipher);
@@ -242,6 +252,7 @@
         private System.Windows.Forms.Button button_ClearCipher;
         private System.Windows.Forms.TextBox textBox_shift;
         private System.Windows.Forms.ComboBox comboBox_currentCipher;
+        private System.Windows.Forms.TextBox textBox_keyWord;
     }
 }
 
