@@ -13,6 +13,7 @@ namespace Work1
     public partial class Form1 : Form
     {
         private Cipher _currentCipher;
+        private string _keyWord = "";
         public Form1()
         {
             InitializeComponent();
@@ -30,27 +31,42 @@ namespace Work1
 
         private void StartEncrypt()
         {
-            var sourceText = richTextBox_Source.Text;
-            Cipher cypher;
-            cypher = _currentCipher;
-            if (cypher != null)
+            try
             {
-                var cipherText = cypher.Encrypt(sourceText, GetShift(), "ПОЭЗИЯ");
+                var sourceText = richTextBox_Source.Text;
+                Cipher cypher;
+                cypher = _currentCipher;
+                if (cypher == null) return;
+                var cipherText = cypher.Encrypt(sourceText, GetShift(), _keyWord);
                 richTextBox_Сipher.Text = cipherText;
             }
-
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                textBox_keyWord.Text = "";
+            }
+            
         }
 
         private void StartDecrypt()
         {
-            var cypherText = richTextBox_Сipher.Text;
-            Cipher cypher;
-            cypher = _currentCipher;
-            if (cypher != null)
+            try
             {
-                var sourceText = cypher.Decrypt(cypherText, GetShift());
-                richTextBox_Decripted.Text = sourceText;
+                var cypherText = richTextBox_Сipher.Text;
+                Cipher cypher;
+                cypher = _currentCipher;
+                if (cypher != null)
+                {
+                    var sourceText = cypher.Decrypt(cypherText, GetShift(), _keyWord);
+                    richTextBox_Decripted.Text = sourceText;
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                textBox_keyWord.Text = "";
+            }
+
         }
 
         private void StartHacking()
@@ -203,16 +219,97 @@ namespace Work1
             {
                 case 0:
                     _currentCipher = new CaesarCipher();
+                    textBox_shift.Enabled = true;
+                    textBox_keyWord.Enabled = false;
                     break;
                 case 1:
                     _currentCipher = new VigenerCipher();
+                    textBox_shift.Enabled = false;
+                    textBox_keyWord.Enabled = true;
                     break;
             }
         }
 
+
         private void textBox_keyWord_TextChanged(object sender, EventArgs e)
         {
+            var sourceKeyWord = textBox_keyWord.Text;
+            var keyWord = HandleKeyWord(sourceKeyWord);
+            textBox_keyWord.Text = keyWord;
+            textBox_keyWord.SelectionStart = keyWord.Length;
+            _keyWord = keyWord;
+
+            StartEncrypt();
 
         }
+
+        private string HandleKeyWord(string sourceKeyWord)
+        {
+            sourceKeyWord = sourceKeyWord.ToUpper();
+            sourceKeyWord = Locales.LocalesList.Where(locale => locale.ReplacmentList.Count != 0)
+                .Aggregate(sourceKeyWord, (current, locale) => Cipher.Replace(current, locale.ReplacmentList));
+
+            if (!CheckString(sourceKeyWord))
+            {
+                MessageBox.Show("");
+
+                while (sourceKeyWord.Length != 0 && !CheckString(sourceKeyWord))
+                {
+                    sourceKeyWord = sourceKeyWord.Remove(sourceKeyWord.Length - 1);
+                }
+            }
+
+            return sourceKeyWord;
+        }
+
+        private bool CheckString(string text)
+        {
+            if (text.Length > 0)
+            {
+                //проверяем на левые символы
+                foreach (var c in text)
+                {
+                    var symOk = false;
+                    foreach (var locale in Locales.LocalesList)
+                    {
+                        if (locale.Alphabet.Contains(c))
+                        {
+                            symOk = true;
+                        }
+                    }
+                    if (!symOk)
+                    {
+                        return false;
+                    }
+
+                }
+
+                //проверяем, что все символы из одного алфавита
+                var localeCount = 0;
+                foreach (var locale in Locales.LocalesList)
+                {
+                    bool locFlag = false;
+                    foreach (var c in text)
+                    {
+                        if (locale.Alphabet.Contains(c))
+                        {
+                            locFlag = true;
+                        }
+                    }
+                    if (locFlag)
+                    {
+                        localeCount++;
+                    }
+                }
+                if (localeCount != 1)
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+
     }
 }

@@ -195,6 +195,7 @@
             // 
             // comboBox_currentCipher
             // 
+            this.comboBox_currentCipher.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox_currentCipher.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_currentCipher.FormattingEnabled = true;
             this.comboBox_currentCipher.Location = new System.Drawing.Point(650, 5);
@@ -205,6 +206,7 @@
             // 
             // textBox_keyWord
             // 
+            this.textBox_keyWord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_keyWord.Location = new System.Drawing.Point(592, 404);
             this.textBox_keyWord.Name = "textBox_keyWord";
             this.textBox_keyWord.Size = new System.Drawing.Size(100, 20);
