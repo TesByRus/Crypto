@@ -24,9 +24,26 @@ namespace Work1
             UpdateCipher();
         }
 
+
+        private void StartAction()
+        {
+            switch (tabControl1.SelectedIndex)
+            {
+                case 0:
+                    StartEncrypt();
+                    break;
+                case 1:
+                    StartDecrypt();
+                    break;
+                case 2:
+                    StartHacking();
+                    break;
+            }
+
+        }
         private void richTextBox_Source_TextChanged(object sender, EventArgs e)
         {
-            StartEncrypt();
+            StartAction();
         }
 
         private void StartEncrypt()
@@ -45,7 +62,7 @@ namespace Work1
                 MessageBox.Show(ex.Message);
                 textBox_keyWord.Text = "";
             }
-            
+
         }
 
         private void StartDecrypt()
@@ -71,12 +88,20 @@ namespace Work1
 
         private void StartHacking()
         {
-            var cypherText = richTextBox_Сipher.Text;
-            Cipher cypher;
-            cypher = _currentCipher;
-            var sourceText = cypher.Hack(cypherText);
-            richTextBox_Hacked.Text = sourceText;
-            textBox_shift.Text = cypher.HackerShift.ToString();
+            try
+            {
+                var cypherText = richTextBox_Сipher.Text;
+                Cipher cypher;
+                cypher = _currentCipher;
+                var sourceText = cypher.Hack(cypherText);
+                richTextBox_Hacked.Text = sourceText;
+                textBox_shift.Text = cypher.HackerShift.ToString();
+                textBox_keyWord.Text = cypher.HackedKeyWord;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
@@ -86,20 +111,53 @@ namespace Work1
                 case 0:
                     richTextBox_Сipher.ReadOnly = true;
                     richTextBox_Сipher.BackColor = Color.FromArgb(240, 240, 240);
-                    textBox_shift.Enabled = true;
-                    StartEncrypt();
+                    if (comboBox_currentCipher.SelectedIndex == 0)
+                    {
+                        textBox_shift.Enabled = true;
+                        textBox_shift.ReadOnly = false;
+                        textBox_keyWord.Enabled = false;
+                    }
+                    else
+                    {
+                        textBox_shift.Enabled = false;
+                        textBox_keyWord.Enabled = true;
+                        textBox_keyWord.ReadOnly = false;
+                    }
+                    StartAction();
                     break;
                 case 1:
                     richTextBox_Сipher.ReadOnly = false;
                     richTextBox_Сipher.BackColor = Color.White;
-                    textBox_shift.Enabled = true;
-                    StartDecrypt();
+                    if (comboBox_currentCipher.SelectedIndex == 0)
+                    {
+                        textBox_shift.Enabled = true;
+                        textBox_shift.ReadOnly = false;
+                        textBox_keyWord.Enabled = false;
+                    }
+                    else
+                    {
+                        textBox_shift.Enabled = false;
+                        textBox_keyWord.Enabled = true;
+                        textBox_keyWord.ReadOnly = false;
+                    }
+                    StartAction();
                     break;
                 case 2:
                     richTextBox_Сipher.ReadOnly = false;
                     richTextBox_Сipher.BackColor = Color.White;
-                    textBox_shift.Enabled = false;
-                    StartHacking();
+                    if (comboBox_currentCipher.SelectedIndex == 0)
+                    {
+                        textBox_shift.Enabled = true;
+                        textBox_shift.ReadOnly = true;
+                        textBox_keyWord.Enabled = false;
+                    }
+                    else
+                    {
+                        textBox_shift.Enabled = false;
+                        textBox_keyWord.Enabled = true;
+                        textBox_keyWord.ReadOnly = true;
+                    }
+                    StartAction();
                     break;
             }
 
@@ -107,28 +165,12 @@ namespace Work1
 
         private void richTextBox_Сipher_TextChanged(object sender, EventArgs e)
         {
-            switch (tabControl1.SelectedIndex)
-            {
-                case 1:
-                    StartDecrypt();
-                    break;
-                case 2:
-                    StartHacking();
-                    break;
-            }
+            StartAction();
         }
 
         private void textBox_shift_TextChanged(object sender, EventArgs e)
         {
-            switch (tabControl1.SelectedIndex)
-            {
-                case 0:
-                    StartEncrypt();
-                    break;
-                case 1:
-                    StartDecrypt();
-                    break;
-            }
+            StartAction();
         }
 
         private int GetShift()
@@ -233,13 +275,16 @@ namespace Work1
 
         private void textBox_keyWord_TextChanged(object sender, EventArgs e)
         {
-            var sourceKeyWord = textBox_keyWord.Text;
-            var keyWord = HandleKeyWord(sourceKeyWord);
-            textBox_keyWord.Text = keyWord;
-            textBox_keyWord.SelectionStart = keyWord.Length;
-            _keyWord = keyWord;
+            if (tabControl1.SelectedIndex != 2)
+            {
+                var sourceKeyWord = textBox_keyWord.Text;
+                var keyWord = HandleKeyWord(sourceKeyWord);
+                textBox_keyWord.Text = keyWord;
+                textBox_keyWord.SelectionStart = keyWord.Length;
+                _keyWord = keyWord;
 
-            StartEncrypt();
+                StartAction();
+            }
 
         }
 

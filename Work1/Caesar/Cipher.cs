@@ -16,7 +16,9 @@ namespace Work1.Caesar
 
         public int HackerShift { get; protected set; }
 
-        
+        public string HackedKeyWord { get; set; }
+
+
 
         public static string Replace(string text, List<Tuple<char, char>> replaces)
         {

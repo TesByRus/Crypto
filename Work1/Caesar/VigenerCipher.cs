@@ -8,6 +8,11 @@ namespace Work1.Caesar
 {
     class VigenerCipher : Cipher
     {
+
+        public VigenerCipher()
+        {
+            HackedKeyWord = "";
+        }
         public override string Encrypt(string text, int shift = 0, string keyWord = "")
         {
             if (text.Length > 0 && keyWord.Length > 0)
@@ -104,10 +109,13 @@ namespace Work1.Caesar
             }
 
             var hackedDeltaTextList = new List<string>();
+
+            HackedKeyWord = "";
             foreach (var deltaText in deltaTextList)
             {
                 var caesarCipher = new CaesarCipher();
-                hackedDeltaTextList.Add(caesarCipher.Hack(deltaText));
+                hackedDeltaTextList.Add(HandleSourceText(caesarCipher.Hack(deltaText)));
+                HackedKeyWord += russianLocale.Alphabet[caesarCipher.HackerShift];
             }
 
 
@@ -146,12 +154,17 @@ namespace Work1.Caesar
 
             countList[0] = 0;
             var max = countList.Max();
+            var mid = (double)countList.Sum() / countList.Count;
+            var borderLine = (max + mid) /1.9;
 
 
             var indexesRepeat = new List<int>();
+
+
+
             for (var i = 0; i < countList.Count; i++)
             {
-                if (countList[i] > 0.9 * max)
+                if (countList[i] > 0.85 * borderLine)
                 {
                     indexesRepeat.Add(i);
                 }
@@ -165,6 +178,8 @@ namespace Work1.Caesar
 
 
             var deltaCount = new Dictionary<int, int>();
+
+            deltas.RemoveAll(x => x < 3);
             foreach (var delta in deltas)
             {
                 if (deltaCount.ContainsKey(delta))
@@ -179,6 +194,7 @@ namespace Work1.Caesar
             var maxCount = deltaCount.Values.Max();
             var maxCountIndex = deltaCount.Values.ToList().IndexOf(maxCount);
             var resultDelta = deltaCount.Keys.ToList()[maxCountIndex];
+
             return resultDelta;
         }
 

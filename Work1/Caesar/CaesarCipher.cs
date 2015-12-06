@@ -80,7 +80,7 @@ namespace Work1.Caesar
                 }
             }
 
-            this.HackerShift = 32 - minShift;
+            this.HackerShift = (32 - minShift) % 32;
 
             return Decrypt(ciphertext, 32 - minShift);
         }
