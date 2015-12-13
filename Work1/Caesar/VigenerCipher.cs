@@ -20,11 +20,6 @@ namespace Work1.Caesar
 
                 var handledText = HandleSourceText(text);
 
-                if (GetTextLocale(handledText) != GetTextLocale(keyWord))
-                {
-                    throw new Exception("Язык исходного текста и ключевого слова, должен быть одинаковый!");
-                }
-
                 var resString = "";
                 var keyWordIndex = 0;
                 foreach (var sym in handledText)
@@ -53,11 +48,6 @@ namespace Work1.Caesar
             if (ciphertext.Length > 0 && keyWord.Length > 0)
             {
                 var handledText = HandleSourceText(ciphertext);
-
-                if (GetTextLocale(handledText) != GetTextLocale(keyWord))
-                {
-                    throw new Exception("Язык исходного текста и ключевого слова, должен быть одинаковый!");
-                }
 
                 var resString = "";
                 var keyWordIndex = 0;
@@ -137,6 +127,8 @@ namespace Work1.Caesar
 
         private int GetDelta(string text)
         {
+            if (text.Length < 5)
+                return 1;
             var countList = new List<int>();
 
             for (int i = 0; i < text.Length; i++)
@@ -155,16 +147,19 @@ namespace Work1.Caesar
             countList[0] = 0;
             var max = countList.Max();
             var mid = (double)countList.Sum() / countList.Count;
-            var borderLine = (max + mid) /1.9;
+            var borderLine = (max + mid) / 2;
 
 
             var indexesRepeat = new List<int>();
 
 
 
-            for (var i = 0; i < countList.Count; i++)
+            for (var i = 2; i < countList.Count - 2; i++)
             {
-                if (countList[i] > 0.85 * borderLine)
+                if (0.8 * countList[i] > countList[i - 1] &&
+                    0.8 * countList[i] > countList[i + 1] &&
+                    0.8 * countList[i] > countList[i - 2] &&
+                    0.8 * countList[i] > countList[i + 2])
                 {
                     indexesRepeat.Add(i);
                 }
@@ -191,6 +186,8 @@ namespace Work1.Caesar
                     deltaCount.Add(delta, 0);
                 }
             }
+            if (deltaCount.Count == 0)
+                return 1;
             var maxCount = deltaCount.Values.Max();
             var maxCountIndex = deltaCount.Values.ToList().IndexOf(maxCount);
             var resultDelta = deltaCount.Keys.ToList()[maxCountIndex];
@@ -203,34 +200,14 @@ namespace Work1.Caesar
         {
             var upper = sourceText.ToUpper();
 
-            Locale curLocale = null;
-            foreach (var sym in upper)
-            {
-                foreach (var locale in Locales.LocalesList)
-                {
-                    if (locale.Alphabet.Contains(sym))
-                    {
-                        curLocale = locale;
-                        break;
-                    }
+            var curLocale = Locales.LocalesList.Find(x => x.Name == "Русский");
 
-                }
-                if (curLocale != null)
-                {
-                    break;
-                }
-            }
-
-            if (curLocale == null)
-            {
-                return "";
-            }
             if (curLocale.ReplacmentList.Count != 0)
             {
                 upper = Replace(upper, curLocale.ReplacmentList);
             }
 
-            string resString = "";
+            var resString = "";
             foreach (var sym in upper)
             {
                 if (curLocale.Alphabet.Contains(sym))
@@ -241,26 +218,5 @@ namespace Work1.Caesar
             return resString;
         }
 
-        private Locale GetTextLocale(string text)
-        {
-            Locale curLocale = null;
-            foreach (var sym in text)
-            {
-                foreach (var locale in Locales.LocalesList)
-                {
-                    if (locale.Alphabet.Contains(sym))
-                    {
-                        curLocale = locale;
-                        break;
-                    }
-
-                }
-                if (curLocale != null)
-                {
-                    break;
-                }
-            }
-            return curLocale;
-        }
     }
 }

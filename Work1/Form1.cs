@@ -55,7 +55,7 @@ namespace Work1
                 cypher = _currentCipher;
                 if (cypher == null) return;
                 var cipherText = cypher.Encrypt(sourceText, GetShift(), _keyWord);
-                richTextBox_Сipher.Text = cipherText;
+                textBox_Cipher.Text = cipherText;
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace Work1
         {
             try
             {
-                var cypherText = richTextBox_Сipher.Text;
+                var cypherText = textBox_Cipher.Text;
                 Cipher cypher;
                 cypher = _currentCipher;
                 if (cypher != null)
@@ -90,7 +90,7 @@ namespace Work1
         {
             try
             {
-                var cypherText = richTextBox_Сipher.Text;
+                var cypherText = textBox_Cipher.Text;
                 Cipher cypher;
                 cypher = _currentCipher;
                 var sourceText = cypher.Hack(cypherText);
@@ -109,8 +109,8 @@ namespace Work1
             switch (tabControl1.SelectedIndex)
             {
                 case 0:
-                    richTextBox_Сipher.ReadOnly = true;
-                    richTextBox_Сipher.BackColor = Color.FromArgb(240, 240, 240);
+                    textBox_Cipher.ReadOnly = true;
+                    textBox_Cipher.BackColor = Color.FromArgb(240, 240, 240);
                     if (comboBox_currentCipher.SelectedIndex == 0)
                     {
                         textBox_shift.Enabled = true;
@@ -126,8 +126,8 @@ namespace Work1
                     StartAction();
                     break;
                 case 1:
-                    richTextBox_Сipher.ReadOnly = false;
-                    richTextBox_Сipher.BackColor = Color.White;
+                    textBox_Cipher.ReadOnly = false;
+                    textBox_Cipher.BackColor = Color.White;
                     if (comboBox_currentCipher.SelectedIndex == 0)
                     {
                         textBox_shift.Enabled = true;
@@ -143,8 +143,8 @@ namespace Work1
                     StartAction();
                     break;
                 case 2:
-                    richTextBox_Сipher.ReadOnly = false;
-                    richTextBox_Сipher.BackColor = Color.White;
+                    textBox_Cipher.ReadOnly = false;
+                    textBox_Cipher.BackColor = Color.White;
                     if (comboBox_currentCipher.SelectedIndex == 0)
                     {
                         textBox_shift.Enabled = true;
@@ -161,11 +161,6 @@ namespace Work1
                     break;
             }
 
-        }
-
-        private void richTextBox_Сipher_TextChanged(object sender, EventArgs e)
-        {
-            StartAction();
         }
 
         private void textBox_shift_TextChanged(object sender, EventArgs e)
@@ -242,10 +237,10 @@ namespace Work1
                     richTextBox_Source.Clear();
                     break;
                 case 1:
-                    richTextBox_Сipher.Clear();
+                    textBox_Cipher.Clear();
                     break;
                 case 2:
-                    richTextBox_Сipher.Clear();
+                    textBox_Cipher.Clear();
                     break;
             }
         }
@@ -296,7 +291,7 @@ namespace Work1
 
             if (!CheckString(sourceKeyWord))
             {
-                MessageBox.Show("");
+                MessageBox.Show("Ключевое слово должно состоять из букв русского алфавита!");
 
                 while (sourceKeyWord.Length != 0 && !CheckString(sourceKeyWord))
                 {
@@ -309,44 +304,13 @@ namespace Work1
 
         private bool CheckString(string text)
         {
-            if (text.Length > 0)
+            var russianLocale = Locales.LocalesList.Find(x => x.Name == "Русский");
+            if (text.Length <= 0) return true;
+
+            //проверяем на левые символы
+            foreach (var c in text)
             {
-                //проверяем на левые символы
-                foreach (var c in text)
-                {
-                    var symOk = false;
-                    foreach (var locale in Locales.LocalesList)
-                    {
-                        if (locale.Alphabet.Contains(c))
-                        {
-                            symOk = true;
-                        }
-                    }
-                    if (!symOk)
-                    {
-                        return false;
-                    }
-
-                }
-
-                //проверяем, что все символы из одного алфавита
-                var localeCount = 0;
-                foreach (var locale in Locales.LocalesList)
-                {
-                    bool locFlag = false;
-                    foreach (var c in text)
-                    {
-                        if (locale.Alphabet.Contains(c))
-                        {
-                            locFlag = true;
-                        }
-                    }
-                    if (locFlag)
-                    {
-                        localeCount++;
-                    }
-                }
-                if (localeCount != 1)
+                if (!russianLocale.Alphabet.Contains(c))
                 {
                     return false;
                 }
@@ -355,6 +319,9 @@ namespace Work1
             return true;
         }
 
-
+        private void textBox_Cipher_TextChanged(object sender, EventArgs e)
+        {
+            StartAction();
+        }
     }
 }

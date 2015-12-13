@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.richTextBox_Сipher = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -43,6 +42,7 @@
             this.textBox_shift = new System.Windows.Forms.TextBox();
             this.comboBox_currentCipher = new System.Windows.Forms.ComboBox();
             this.textBox_keyWord = new System.Windows.Forms.TextBox();
+            this.textBox_Cipher = new System.Windows.Forms.TextBox();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -57,18 +57,6 @@
             this.label1.Size = new System.Drawing.Size(168, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Введите тескт для зашифровки";
-            // 
-            // richTextBox_Сipher
-            // 
-            this.richTextBox_Сipher.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox_Сipher.Location = new System.Drawing.Point(387, 34);
-            this.richTextBox_Сipher.Name = "richTextBox_Сipher";
-            this.richTextBox_Сipher.ReadOnly = true;
-            this.richTextBox_Сipher.Size = new System.Drawing.Size(384, 359);
-            this.richTextBox_Сipher.TabIndex = 3;
-            this.richTextBox_Сipher.Text = "";
-            this.richTextBox_Сipher.TextChanged += new System.EventHandler(this.richTextBox_Сipher_TextChanged);
             // 
             // label2
             // 
@@ -213,18 +201,29 @@
             this.textBox_keyWord.TabIndex = 10;
             this.textBox_keyWord.TextChanged += new System.EventHandler(this.textBox_keyWord_TextChanged);
             // 
+            // textBox_Cipher
+            // 
+            this.textBox_Cipher.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_Cipher.Location = new System.Drawing.Point(387, 34);
+            this.textBox_Cipher.Multiline = true;
+            this.textBox_Cipher.Name = "textBox_Cipher";
+            this.textBox_Cipher.Size = new System.Drawing.Size(384, 364);
+            this.textBox_Cipher.TabIndex = 11;
+            this.textBox_Cipher.TextChanged += new System.EventHandler(this.textBox_Cipher_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 444);
+            this.Controls.Add(this.textBox_Cipher);
             this.Controls.Add(this.textBox_keyWord);
             this.Controls.Add(this.comboBox_currentCipher);
             this.Controls.Add(this.textBox_shift);
             this.Controls.Add(this.button_ClearCipher);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.richTextBox_Сipher);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -241,7 +240,6 @@
         #endregion
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RichTextBox richTextBox_Сipher;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TabPage tabPage2;
@@ -255,6 +253,7 @@
         private System.Windows.Forms.TextBox textBox_shift;
         private System.Windows.Forms.ComboBox comboBox_currentCipher;
         private System.Windows.Forms.TextBox textBox_keyWord;
+        private System.Windows.Forms.TextBox textBox_Cipher;
     }
 }
 
